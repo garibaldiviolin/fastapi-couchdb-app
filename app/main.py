@@ -1,8 +1,8 @@
-from typing import Union
+from typing import Annotated
 
 from aiocouch import CouchDB
 from aiocouch.exception import ConflictError
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel
 
 app = FastAPI()
@@ -33,6 +33,21 @@ async def add_item(item: Item):
 
         await new_doc.save()
         return item
+
+
+@app.get("/items/")
+async def get_items(
+    limit: Annotated[int, Query(gt=0, lt=20)] = 2,
+    offset: int = 0,
+):
+    async with CouchDB(
+        "http://couchserver:5984", user="admin", password="password123"
+    ) as couchdb:
+        db = await couchdb["stores"]
+        response = []
+        async for document in db.docs(limit=limit, skip=offset):
+            response.append(document)
+        return response
 
 
 @app.get("/items/{item_id}/")
