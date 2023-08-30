@@ -26,7 +26,6 @@ async def add_item(item: Item):
         settings.COUCHDB_URL, user=settings.COUCHDB_USER, password=settings.COUCHDB_PASSWORD
     ) as couchdb:
         db = await couchdb["stores"]
-        item_id = item.id
         item_json = item.dict()
         del item_json["id"]
         try:
@@ -80,6 +79,5 @@ async def modify_item(item_id: int, modified_item: ModifiedItem):
             raise HTTPException(status_code=404, detail="item_not_found")
 
         doc.update(modified_item)
-        # actually perform the request to save the modification to the server
         await doc.save()
         return doc
