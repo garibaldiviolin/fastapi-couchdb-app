@@ -1,6 +1,5 @@
 from aiocouch import CouchDB
 from aiocouch import exception as aiocouch_exceptions
-
 from fastapi import HTTPException
 
 from api import models, settings
@@ -12,16 +11,16 @@ def format_item_id(item_id: int):
 
 async def add_item(item: models.Item):
     async with CouchDB(
-        settings.COUCHDB_URL, user=settings.COUCHDB_USER, password=settings.COUCHDB_PASSWORD
+        settings.COUCHDB_URL,
+        user=settings.COUCHDB_USER,
+        password=settings.COUCHDB_PASSWORD,
     ) as couchdb:
         db = await couchdb[settings.COUCHDB_DATABASE]
         item_json = item.dict()
         del item_json["id"]
         try:
-            new_doc = await db.create(
-                format_item_id(item.id), data=item_json
-            )
-        except aiocouch_exceptions.ConflictError as e:
+            new_doc = await db.create(format_item_id(item.id), data=item_json)
+        except aiocouch_exceptions.ConflictError:
             raise HTTPException(status_code=400, detail="item_already_exists")
 
         await new_doc.save()
@@ -30,7 +29,9 @@ async def add_item(item: models.Item):
 
 async def get_items(limit: int, offset: int | None = 0):
     async with CouchDB(
-        settings.COUCHDB_URL, user=settings.COUCHDB_USER, password=settings.COUCHDB_PASSWORD
+        settings.COUCHDB_URL,
+        user=settings.COUCHDB_USER,
+        password=settings.COUCHDB_PASSWORD,
     ) as couchdb:
         db = await couchdb[settings.COUCHDB_DATABASE]
         response = []
@@ -41,7 +42,9 @@ async def get_items(limit: int, offset: int | None = 0):
 
 async def get_item(item_id: int):
     async with CouchDB(
-        settings.COUCHDB_URL, user=settings.COUCHDB_USER, password=settings.COUCHDB_PASSWORD
+        settings.COUCHDB_URL,
+        user=settings.COUCHDB_USER,
+        password=settings.COUCHDB_PASSWORD,
     ) as couchdb:
         db = await couchdb[settings.COUCHDB_DATABASE]
         try:
@@ -53,7 +56,9 @@ async def get_item(item_id: int):
 
 async def modify_item(item_id: int, modified_item: models.ModifiedItem):
     async with CouchDB(
-        settings.COUCHDB_URL, user=settings.COUCHDB_USER, password=settings.COUCHDB_PASSWORD
+        settings.COUCHDB_URL,
+        user=settings.COUCHDB_USER,
+        password=settings.COUCHDB_PASSWORD,
     ) as couchdb:
         db = await couchdb[settings.COUCHDB_DATABASE]
         try:
@@ -66,9 +71,13 @@ async def modify_item(item_id: int, modified_item: models.ModifiedItem):
         return doc
 
 
-async def modify_item_partially(item_id: int, partially_modified_item: models.PartiallyModifiedItem):
+async def modify_item_partially(
+    item_id: int, partially_modified_item: models.PartiallyModifiedItem
+):
     async with CouchDB(
-        settings.COUCHDB_URL, user=settings.COUCHDB_USER, password=settings.COUCHDB_PASSWORD
+        settings.COUCHDB_URL,
+        user=settings.COUCHDB_USER,
+        password=settings.COUCHDB_PASSWORD,
     ) as couchdb:
         db = await couchdb[settings.COUCHDB_DATABASE]
         try:

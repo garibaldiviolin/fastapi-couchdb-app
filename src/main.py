@@ -2,7 +2,7 @@ from typing import Annotated
 
 from fastapi import FastAPI, Query
 
-from api import settings, databases, models
+from api import databases, models
 
 app = FastAPI()
 
@@ -31,5 +31,7 @@ async def modify_item(item_id: int, modified_item: models.ModifiedItem):
 
 
 @app.patch("/items/{item_id}/")
-async def modify_item_partially(item_id: int, partially_modified_item: models.PartiallyModifiedItem):
+async def modify_item_partially(
+    item_id: int, partially_modified_item: models.PartiallyModifiedItem
+):
     return await databases.modify_item_partially(item_id, partially_modified_item)
