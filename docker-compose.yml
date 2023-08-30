@@ -16,12 +16,12 @@ services:
 
   api:
     build: .
-    working_dir: /home/appuser/app
+    working_dir: /home/appuser
     command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
     ports:
       - "8000:8000"
     volumes:
-      - ./:/home/appuser
+      - ./src/:/home/appuser
     depends_on:
       - couchserver
     networks:

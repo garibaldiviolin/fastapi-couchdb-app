@@ -1,4 +1,4 @@
-from app.utils import sum
+from api.utils import sum
 
 
 def test_sum():

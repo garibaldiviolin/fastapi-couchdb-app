@@ -5,7 +5,7 @@ from aiocouch import exception as aiocouch_exceptions
 from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel
 
-import settings
+from api import settings
 
 app = FastAPI()
 
