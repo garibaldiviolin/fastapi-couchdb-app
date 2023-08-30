@@ -34,7 +34,7 @@ def database():
     asyncio.run(delete_database())
 
 
-async def create_item():
+async def create_item(existing_item_id):
     async with aiocouch.CouchDB(
         settings.COUCHDB_URL,
         user=settings.COUCHDB_USER,
@@ -46,11 +46,16 @@ async def create_item():
             "description": "This is a soap",
             "price": 1.54,
         }
-        new_doc = await db.create(databases.format_item_id(81238), data=item)
+        new_doc = await db.create(databases.format_item_id(existing_item_id), data=item)
         await new_doc.save()
         return item
 
 
 @pytest.fixture
-def existing_item(database):
-    return asyncio.run(create_item())
+def existing_item_id():
+    return 81238
+
+
+@pytest.fixture
+def existing_item(database, existing_item_id):
+    return asyncio.run(create_item(existing_item_id))
