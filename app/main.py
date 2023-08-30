@@ -33,7 +33,7 @@ async def add_item(item: Item):
             new_doc = await db.create(
                 f"items:{item.id}", data=item_json
             )
-        except exceptions.ConflictError as e:
+        except aiocouch_exceptions.ConflictError as e:
             raise HTTPException(status_code=400, detail="item_already_exists")
 
         await new_doc.save()
