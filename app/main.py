@@ -5,6 +5,8 @@ from aiocouch.exception import ConflictError
 from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel
 
+import settings
+
 app = FastAPI()
 
 
@@ -18,7 +20,7 @@ class Item(BaseModel):
 @app.post("/items/")
 async def add_item(item: Item):
     async with CouchDB(
-        "http://couchserver:5984", user="admin", password="password123"
+        settings.COUCHDB_URL, user=settings.COUCHDB_USER, password=settings.COUCHDB_PASSWORD
     ) as couchdb:
         db = await couchdb["stores"]
         item_id = item.id
@@ -41,7 +43,7 @@ async def get_items(
     offset: int = 0,
 ):
     async with CouchDB(
-        "http://couchserver:5984", user="admin", password="password123"
+        settings.COUCHDB_URL, user=settings.COUCHDB_USER, password=settings.COUCHDB_PASSWORD
     ) as couchdb:
         db = await couchdb["stores"]
         response = []
@@ -53,7 +55,7 @@ async def get_items(
 @app.get("/items/{item_id}/")
 async def get_item(item_id: int):
     async with CouchDB(
-        "http://couchserver:5984", user="admin", password="password123"
+        settings.COUCHDB_URL, user=settings.COUCHDB_USER, password=settings.COUCHDB_PASSWORD
     ) as couchdb:
         db = await couchdb["stores"]
         doc = await db[f"items:{item_id}"]

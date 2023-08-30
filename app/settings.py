@@ -1,3 +1,5 @@
 from decouple import config
 
-API_HOST = config("API_HOST")
+COUCHDB_URL = config("COUCHDB_URL")
+COUCHDB_USER = config("COUCHDB_USER")
+COUCHDB_PASSWORD = config("COUCHDB_PASSWORD")
