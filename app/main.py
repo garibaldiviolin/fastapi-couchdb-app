@@ -61,7 +61,10 @@ async def get_item(item_id: int):
         settings.COUCHDB_URL, user=settings.COUCHDB_USER, password=settings.COUCHDB_PASSWORD
     ) as couchdb:
         db = await couchdb["stores"]
-        doc = await db[f"items:{item_id}"]
+        try:
+            doc = await db[f"items:{item_id}"]
+        except aiocouch_exceptions.NotFoundError:
+            raise HTTPException(status_code=404, detail="item_not_found")
         return doc
 
 
