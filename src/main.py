@@ -32,7 +32,7 @@ async def add_item(item: Item):
     async with CouchDB(
         settings.COUCHDB_URL, user=settings.COUCHDB_USER, password=settings.COUCHDB_PASSWORD
     ) as couchdb:
-        db = await couchdb["stores"]
+        db = await couchdb[settings.COUCHDB_DATABASE]
         item_json = item.dict()
         del item_json["id"]
         try:
@@ -54,7 +54,7 @@ async def get_items(
     async with CouchDB(
         settings.COUCHDB_URL, user=settings.COUCHDB_USER, password=settings.COUCHDB_PASSWORD
     ) as couchdb:
-        db = await couchdb["stores"]
+        db = await couchdb[settings.COUCHDB_DATABASE]
         response = []
         async for document in db.docs(limit=limit, skip=offset):
             response.append(document)
@@ -66,7 +66,7 @@ async def get_item(item_id: int):
     async with CouchDB(
         settings.COUCHDB_URL, user=settings.COUCHDB_USER, password=settings.COUCHDB_PASSWORD
     ) as couchdb:
-        db = await couchdb["stores"]
+        db = await couchdb[settings.COUCHDB_DATABASE]
         try:
             doc = await db[f"items:{item_id}"]
         except aiocouch_exceptions.NotFoundError:
@@ -79,7 +79,7 @@ async def modify_item(item_id: int, modified_item: ModifiedItem):
     async with CouchDB(
         settings.COUCHDB_URL, user=settings.COUCHDB_USER, password=settings.COUCHDB_PASSWORD
     ) as couchdb:
-        db = await couchdb["stores"]
+        db = await couchdb[settings.COUCHDB_DATABASE]
         try:
             doc = await db[f"items:{item_id}"]
         except aiocouch_exceptions.NotFoundError:
@@ -95,7 +95,7 @@ async def modify_item_partially(item_id: int, partially_modified_item: Partially
     async with CouchDB(
         settings.COUCHDB_URL, user=settings.COUCHDB_USER, password=settings.COUCHDB_PASSWORD
     ) as couchdb:
-        db = await couchdb["stores"]
+        db = await couchdb[settings.COUCHDB_DATABASE]
         try:
             doc = await db[f"items:{item_id}"]
         except aiocouch_exceptions.NotFoundError:
