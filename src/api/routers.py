@@ -7,7 +7,7 @@ from api import databases, models
 router = APIRouter()
 
 
-@router.post("/items/")
+@router.post("/items/", status_code=201)
 async def add_item(item: models.Item):
     return await databases.add_item(item)
 
