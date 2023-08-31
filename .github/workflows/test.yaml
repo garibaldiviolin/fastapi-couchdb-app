@@ -26,5 +26,5 @@ jobs:
         shell: bash
 
       - name: Wait for server to be ready
-        run: docker-compose exec --workdir /home/appuser/tests -T api pytest -vv
+        run: make test
         shell: bash
