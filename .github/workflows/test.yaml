@@ -25,6 +25,6 @@ jobs:
         run: make up
         shell: bash
 
-      - name: Wait for server to be ready
+      - name: Call tests
         run: make test
         shell: bash
