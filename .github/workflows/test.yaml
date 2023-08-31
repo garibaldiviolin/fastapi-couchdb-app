@@ -5,6 +5,11 @@ jobs:
   # Label of the container job
   container-job:
     runs-on: ubuntu-latest
+    env:
+      COUCHDB_URL: http://localhost:5984
+      COUCHDB_USER: admin
+      COUCHDB_PASSWORD: password123
+      COUCHDB_DATABASE: testing_database
 
     # Service containers to run with `container-job`
     services:
