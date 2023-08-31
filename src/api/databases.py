@@ -16,7 +16,7 @@ async def add_item(item: models.Item):
         password=settings.COUCHDB_PASSWORD,
     ) as couchdb:
         db = await couchdb[settings.COUCHDB_DATABASE]
-        item_json = item.dict()
+        item_json = item.model_dump()
         del item_json["id"]
         try:
             new_doc = await db.create(format_item_id(item.id), data=item_json)
@@ -85,7 +85,7 @@ async def modify_item_partially(
         except aiocouch_exceptions.NotFoundError:
             raise HTTPException(status_code=404, detail="item_not_found")
 
-        updated_data = partially_modified_item.dict(exclude_unset=True)
+        updated_data = partially_modified_item.model_dump(exclude_unset=True)
         doc.update(updated_data)
         await doc.save()
         return doc
