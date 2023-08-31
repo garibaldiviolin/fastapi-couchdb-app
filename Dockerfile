@@ -20,5 +20,8 @@ RUN poetry config virtualenvs.create false \
 
 FROM python-deps AS runtime
 
+COPY src /home/src
+WORKDIR /home/src
+
 # Run the application
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
