@@ -5,11 +5,6 @@ jobs:
   # Label of the container job
   container-job:
     runs-on: ubuntu-latest
-    env:
-      COUCHDB_URL: http://localhost:5984
-      COUCHDB_USER: admin
-      COUCHDB_PASSWORD: password123
-      COUCHDB_DATABASE: testing_database
 
     # Service containers to run with `container-job`
     services:
@@ -30,4 +25,9 @@ jobs:
         run: docker build -t api .
 
       - name: Run tests
-        run: docker run --rm api:latest pytest -vv
+        run: docker run \
+          -e COUCHDB_URL='http://localhost:5984' \
+          -e COUCHDB_USER='admin' \
+          -e COUCHDB_PASSWORD='password123' \
+          -e COUCHDB_DATABASE='testing_database' \
+          --rm api:latest pytest -vv
