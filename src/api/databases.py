@@ -54,7 +54,7 @@ async def get_item(item_id: int):
         return doc
 
 
-async def modify_item(item_id: int, modified_item: models.ModifiedItem):
+async def modify_item(item_id: int, modified_item: models.ModifiedItem     ):
     async with CouchDB(
         settings.COUCHDB_URL,
         user=settings.COUCHDB_USER,
