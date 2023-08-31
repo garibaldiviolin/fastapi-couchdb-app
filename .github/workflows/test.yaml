@@ -1,0 +1,26 @@
+name: Run tests
+on: push
+
+jobs:
+  # Label of the container job
+  container-job:
+    # Service containers to run with `container-job`
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: couchdb:3.3.2
+        # Provide the password for postgres
+        env:
+          - COUCHDB_USER=admin
+          - COUCHDB_PASSWORD=password123
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Build docker images
+        run: docker build -t local < Dockerfile
+
+      - name: Run tests
+        run: docker run -it -v pytest -vv
