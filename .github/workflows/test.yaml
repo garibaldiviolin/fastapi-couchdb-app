@@ -9,10 +9,10 @@ jobs:
     # Service containers to run with `container-job`
     services:
       # Label used to access the service container
-      postgres:
+      couchdb:
         # Docker Hub image
         image: couchdb:3.3.2
-        # Provide the password for postgres
+        # Provide user and password for couchdb
         env:
           COUCHDB_USER: admin
           COUCHDB_PASSWORD: password123
