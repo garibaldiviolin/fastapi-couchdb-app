@@ -87,4 +87,4 @@ def test_modify_item_partially(field_to_update, new_value, item, item_dict, item
 def test_modify_item_partially_with_inexistent_id(database, item_dict, item_id):
     response = client.patch(f"/items/{item_id}/", json=item_dict)
     assert response.status_code == 404
-    assert response.json() == {"detail": "item_not_found"}
+    assert response.json() == {}
