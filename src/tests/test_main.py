@@ -1,3 +1,4 @@
+import pytest
 from fastapi.testclient import TestClient
 
 from main import app
@@ -41,3 +42,49 @@ def test_add_item_with_existing_id(item, item_dict, item_id):
     response = client.post("/items/", json=item_dict)
     assert response.status_code == 400
     assert response.json() == {"detail": "item_already_exists"}
+
+
+def test_modify_item(item, item_dict, item_id):
+    item_dict.update(
+        {
+            "name": "soap4",
+            "description": "This is a soap 2.0",
+            "price": 21.56,
+        }
+    )
+    response = client.put(f"/items/{item_id}/", json=item_dict)
+    assert response.status_code == 200
+    item.update(item_dict)
+    response_json = response.json()
+    item["_rev"] = response_json["_rev"]
+    assert response_json == item
+
+
+def test_modify_item_with_inexistent_id(database, item_dict, item_id):
+    response = client.put(f"/items/{item_id}/", json=item_dict)
+    assert response.status_code == 404
+    assert response.json() == {"detail": "item_not_found"}
+
+
+@pytest.mark.parametrize(
+    "field_to_update,new_value",
+    [
+        ("name", "soap4"),
+        ("description", "This is soap 2.0"),
+        ("price", 21.56),
+    ],
+)
+def test_modify_item_partially(field_to_update, new_value, item, item_dict, item_id):
+    item_dict[field_to_update] = new_value
+    response = client.patch(f"/items/{item_id}/", json=item_dict)
+    assert response.status_code == 200
+    item[field_to_update] = new_value
+    response_json = response.json()
+    item["_rev"] = response_json["_rev"]
+    assert response_json == item
+
+
+def test_modify_item_partially_with_inexistent_id(database, item_dict, item_id):
+    response = client.patch(f"/items/{item_id}/", json=item_dict)
+    assert response.status_code == 404
+    assert response.json() == {"detail": "item_not_found"}
