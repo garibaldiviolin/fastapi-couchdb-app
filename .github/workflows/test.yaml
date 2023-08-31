@@ -28,3 +28,11 @@ jobs:
       - name: Call tests
         run: make test
         shell: bash
+
+      - name: Install pre-commit
+        run: pip install pre-commit
+        shell: bash
+
+      - name: Run pre-commit on all files
+        run: pre-commit run -a -v
+        shell: bash
