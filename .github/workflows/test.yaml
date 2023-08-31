@@ -25,4 +25,4 @@ jobs:
         run: docker build -t api .
 
       - name: Run tests
-        run: docker run -it api:latest pytest -vv
+        run: docker run --rm api:latest pytest -vv
