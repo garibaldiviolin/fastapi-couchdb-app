@@ -21,8 +21,10 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v3
 
-      - name: Build docker images
-        run: docker build -t api .
+      - name: Start server by running docker-compose
+        run: make up
+        shell: bash
 
-      - name: Run tests
-        run: docker run -e COUCHDB_URL='http://couchdb:5984' -e COUCHDB_USER='admin' -e COUCHDB_PASSWORD='password123' -e COUCHDB_DATABASE='testing_database' --rm api:latest pytest -vv
+      - name: Wait for server to be ready
+        run: make test
+        shell: bash
