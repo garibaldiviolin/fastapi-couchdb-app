@@ -14,8 +14,8 @@ jobs:
         image: couchdb:3.3.2
         # Provide the password for postgres
         env:
-          COUCHDB_USER=admin
-          COUCHDB_PASSWORD=password123
+          COUCHDB_USER: admin
+          COUCHDB_PASSWORD: password123
 
     steps:
       - name: Check out code
