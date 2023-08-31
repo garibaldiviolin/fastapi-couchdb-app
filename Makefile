@@ -15,3 +15,7 @@ destroy:
 
 test:
 	docker-compose exec --workdir /home/appuser/tests api pytest -vv
+
+coverage:
+	docker-compose exec --workdir /home/appuser/tests api pytest -vv \
+		--cov --cov-report=html
