@@ -25,4 +25,4 @@ jobs:
         run: docker build -t api .
 
       - name: Run tests
-        run: docker run -e COUCHDB_URL='http://localhost:5984' -e COUCHDB_USER='admin' -e COUCHDB_PASSWORD='password123' -e COUCHDB_DATABASE='testing_database' --rm api:latest pytest -vv
+        run: docker run -e COUCHDB_URL='http://couchdb:5984' -e COUCHDB_USER='admin' -e COUCHDB_PASSWORD='password123' -e COUCHDB_DATABASE='testing_database' --rm api:latest pytest -vv
