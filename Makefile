@@ -19,3 +19,6 @@ test:
 coverage:
 	docker-compose exec --workdir /home/appuser/tests -T api pytest -vv \
 		--cov --cov-report=html
+
+bash:
+	docker-compose exec --workdir /home/appuser/api api /bin/bash
