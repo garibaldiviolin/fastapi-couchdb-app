@@ -56,7 +56,6 @@ def test_modify_item(item, item_dict, item_id):
     assert response.status_code == 200
     item.update(item_dict)
     response_json = response.json()
-    item["_rev"] = response_json["_rev"]
     assert response_json == item
 
 
@@ -80,7 +79,6 @@ def test_modify_item_partially(field_to_update, new_value, item, item_dict, item
     assert response.status_code == 200
     item[field_to_update] = new_value
     response_json = response.json()
-    item["_rev"] = response_json["_rev"]
     assert response_json == item
 
 

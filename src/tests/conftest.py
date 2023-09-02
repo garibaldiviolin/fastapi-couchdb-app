@@ -68,11 +68,12 @@ def item_id2():
 
 @pytest.fixture
 def item(database, item_id, item_dict):
-    return asyncio.run(create_item(item_id, item_dict))
+    asyncio.run(create_item(item_id, item_dict))
+    return {"id": item_id, **item_dict}
 
 
 @pytest.fixture
 def items(database, item_id, item_id2, item_dict):
-    item = asyncio.run(create_item(item_id, item_dict))
-    item2 = asyncio.run(create_item(item_id2, item_dict))
-    return item, item2
+    asyncio.run(create_item(item_id, item_dict))
+    asyncio.run(create_item(item_id2, item_dict))
+    return [{"id": item_id, **item_dict}, {"id": item_id2, **item_dict}]

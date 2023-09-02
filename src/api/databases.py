@@ -24,7 +24,7 @@ async def add_item(item: models.Item):
             raise HTTPException(status_code=400, detail="item_already_exists")
 
         await new_doc.save()
-        return item
+        return new_doc.data
 
 
 async def get_items(limit: int, offset: int | None = 0):
@@ -36,7 +36,7 @@ async def get_items(limit: int, offset: int | None = 0):
         db = await couchdb[settings.COUCHDB_DATABASE]
         response = []
         async for document in db.docs(limit=limit, skip=offset):
-            response.append(document)
+            response.append(document.data)
         return response
 
 
@@ -51,7 +51,7 @@ async def get_item(item_id: int):
             doc = await db[format_item_id(item_id)]
         except aiocouch_exceptions.NotFoundError:
             raise HTTPException(status_code=404, detail="item_not_found")
-        return doc
+        return doc.data
 
 
 async def modify_item(item_id: int, modified_item: models.ModifiedItem):
@@ -68,7 +68,7 @@ async def modify_item(item_id: int, modified_item: models.ModifiedItem):
 
         doc.update(modified_item)
         await doc.save()
-        return doc
+        return doc.data
 
 
 async def modify_item_partially(
@@ -88,4 +88,4 @@ async def modify_item_partially(
         updated_data = partially_modified_item.model_dump(exclude_unset=True)
         doc.update(updated_data)
         await doc.save()
-        return doc
+        return doc.data
